@@ -2,7 +2,7 @@
   
   <h2>CITS1003 Project Report</h2>
   
-  <p>Student ID: [Student ID]</p>
+  <p>Student ID: [Student ID]</p> 
   <p>Student Name: [First and Surname]</p>
 
 </div>
