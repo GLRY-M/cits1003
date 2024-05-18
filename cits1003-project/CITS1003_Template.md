@@ -176,10 +176,43 @@ UWA{xxxxxxxxxx}
 
 ## Emu in the Shell
 ### Step 1
-A clear, and detailed description.  
+#### SSH login to server:
+Connect to the server via SSH using the provided account information. Using commands:
+```
+ssh-p 2022 ir-account@34.87.251.234
+```
+`- p 2022` is the specified port, the username is `ir-account`, and the server address is `34.87.251.234`.  
 
+Find and check the PAM module:
+Once logged in, we need to check the files in the `/lib/x86_64 Linux gnu/security` directory to find any recently modified PAM modules. We can use the following command to view the modification time of a file:
+```
+ls lt/lib/x86_64 Linux gnu/security
+```
+To find the file be changed by EMU, we can go to this blog: `https://github.com/zephrax/linux-pam-backdoor`. Then we will know the file `pam_unix.so` is what er are looking for.
 ### Step 2
-### Step X
+#### Now copy this file to local folder:
+Let's copy the files to the `/tmp` directory, which is usually open to all users for write access. Use the following command:
+(Ensure that you execute this command in the terminal of the Kali environment)
+```
+scp -P 2022 ir-account@34.87.251.234:/tmp/pam_unix.so ~/pam_unix.so
+```
+### Step 3
+#### Analyse what did EMU change in pam_unix.so:
+Use Ghidra to do it: (download it through: `https://ghidra-sre.org/`).
+We also need to download JDK (version need to higher than 17)
+
+Now open Ghidra and import `pam_unix.so` and `analyse` it. As we knew from the clue, there is an account called 'emu-haxor', so we can use this as the keyword to search in the file.
+
+![image](https://github.com/GLRY-M/cits1003/assets/169660884/bf625be8-22b5-4103-a692-4b7ff54ba2f4)
+
+There is an item `pUpPet_m4sT3r`. It probably is the password for emu-haxor account. So log in the emu-haxor now:
+```
+ssh-p 2022 emu-haxor@34.87.251.234
+```
+The flag should be in it right now, use `ls` have a look at what's in here and we can find there is a `flag.txt` here -- is what we are looking for:
+```
+cat flag.txt
+```
 
 #### Flag Found
 ```bash
