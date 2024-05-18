@@ -10,14 +10,32 @@
 # Part 1 - Linux and Networking
 ## Emu Hack #1 - Backdoored
 ### Step 1
-
-### Step 2
-
-### Step 3
-
+Picture may embed some metadata. You can use exiftool to extract this information.
+Install exiftool:
+```
+sudo apt-get install exiftool
+```
+Extract metadata:
+```
+exiftool /home/kali/loganpaul-emus.png
+```
+And we got:
+```
+┌──(kali㉿kali)-[~]
+└─$ exiftool /home/kali/loganpaul-emus.png
+ExifTool Version Number         : 12.76
+File Name                       : loganpaul-emus.png
+Directory                       : /home/kali
+......
+GPS Latitude                    : 31 deg 27' 59.19" S
+GPS Longitude                   : 119 deg 29' 0.70" E
+GPS Position                    : 31 deg 27' 59.19" S, 119 deg 29' 0.70" E
+```
+Now we have the location: `-31.466441, 119.483528`.
+So we can search it in GoogleMap: `https://www.google.com/maps`.
 #### Flag Found
 ```bash
-UWA{}
+UWA{Marvel Loch}
 ```
 
 ## Emu Hack #2 - Git Gud
