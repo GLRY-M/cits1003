@@ -157,9 +157,23 @@ UWA{how_did_u_get_pass_that_login_shell?????}
 
 ## Emu Hack #4 - Git Gud or GTFO Bin
 ### Step 1
-A clear, and detailed description. 
-
+Because `python3 -c 'import pty; pty.spawn("/bin/bash")'` didn't work on my computer, I used this instead:
+```
+ssh -t -p 2022 emu001@34.116.68.59 "bash -i"
+```
+`-t`: This option forces the allocation of a pseudo terminal. For certain commands, especially those that require user interaction, such as bash, this option is necessary. It allows us to run interactive shells or other commands in remote sessions.
+`"bash - i"`: This section is the command to be executed after successfully connecting to the remote server. In this case, we need to launch an interactive bash shell- The i option represents an interactive shell.
 ### Step 2
+```
+$ sudo -l
+Matching Defaults entries for emu001 on e4b74d8b74d2:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin,
+    use_pty
+
+User emu001 may run the following commands on e4b74d8b74d2:
+    (mr_x) /usr/bin/git
+```
 ### Step X
 
 #### Flag Found
