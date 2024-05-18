@@ -115,14 +115,44 @@ UWA{tH3_eMoO5_w1LL_n3V3r_sToP_d01nG_tH35e_dVmB_c1Br_cH3eF_ch4LlS}
 
 ## Emu Casino
 ### Step 1
-A clear, and detailed description. 
-
+#### What is seed?
+As we can see from the `filp_coin.py` file, `seed(str(session["round"]) + "_" + session["session_id"])` is the main thing to decide the result.
+The seed() function in Python initializes the random number generator with a specific starting point, allowing for reproducible random outcomes.
+The seed here is consist of two parts: first one is `session["round"]` which is the round of the game, the second one is `session["session_id"]` which can be found in the cookie.
 ### Step 2
-### Step X
+#### Find the session id:
+We can right click on the page `http://34.87.251.234:3000/` and select `inspect`. Then find `Application` and we can see `cookie` on the left panel.
+The cookie value we found is:
+```
+eyJjcmVkaXRzIjoxMCwicm91bmQiOjEsInNlc3Npb25faWQiOiJiYTNlNTJiMTc0M2Y3MzUxOGM4YmEwYzY1YjAzYTliYyJ9.ZkiIpw.pTUdUQa5nkII0zkbM7EBa8RXQY4
+```
+This is base64 text, so we can decode it through CyberChef: `https://cyberchef.io/#recipe=From_Base64('A-Za-z0-9%2B/%3D',true)`.
 
+After we use `From Base64` , we got:
+```
+{"credits":10,"round":1,"session_id":"ba3e52b1743f73518c8ba0c65b03a9bc"}fH.§
+SQÕ.k.ä .3.³;..¼Et.ä
+```
+So the session id is `ba3e52b1743f73518c8ba0c65b03a9bc`.
+### Step 3
+#### Use `solution.py`:
+As the solution provided:
+```
+
+def flip_coin():
+    # Change this line
+    session_id = ""
+    # Change this line
+    round = 0
+
+    seed(str(round) + "_" + session_id)
+
+    print(choice(["tails", "heads"]))
+```
+Only thing we need to do is filling the session id and round number in it and we will get the prediction.
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{R0LLl111Llli1iNg_1N_C4$$$$h!11!}
 ```
 
 ## EWT
