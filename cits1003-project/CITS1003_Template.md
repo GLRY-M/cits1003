@@ -10,14 +10,63 @@
 # Part 1 - Linux and Networking
 ## Emu Hack #1 - Backdoored
 ### Step 1
-A clear, and detailed description.  
+Use NMAP to scan the specified port range of the server to determine which port has open services.
+Step 1: Use nmap to scan ports
+Firstly, we will use nmap to scan the port range 61000 to 61500 on IP address 34.116.68.59. Install it with command:
+```
+sudo apt-get install nmap
+```
+Scan specified port range
+Scan the specified port range using the following command:
+```
+nmap -p 61000-61500 34.116.68.59 -Pn
+```
+ `-p` : option is used to specify the port range.
 
+ `- Pn`:  option is used to skip host probing (this option can be used if you encounter issues with unresponsive hosts).
+
+ Then we got this:
+ ```
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-05-18 08:16 EDT
+Nmap scan report for 59.68.116.34.bc.googleusercontent.com (34.116.68.59)
+Host is up (0.063s latency).
+Not shown: 500 filtered tcp ports (no-response)
+PORT      STATE SERVICE
+61337/tcp open  unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 60.90 seconds
+```
 ### Step 2
-### Step X
+Use Netcat to send TCP messages to the discovered open port and verify which port is the backdoor port.
+Install netcat with command:
+```
+sudo apt-get install netcat
+```
+The port we found is `61337`, so we can use this command to send the message:
+```
+echo "EMU" | nc 34.116.68.59 61337
+```
+We got what we need now.
+```
+ ______        ___   _ _____ ____    _                  
+|  _ \ \      / / \ | | ____|  _ \  | |__  _   _        
+| |_) \ \ /\ / /|  \| |  _| | | | | | '_ \| | | |       
+|  __/ \ V  V / | |\  | |___| |_| | | |_) | |_| |       
+|_|     \_/\_/  |_| \_|_____|____/  |_.__/ \__, |       
+    _                             _____    |___/        
+   / \   _ __   __ _ _ __ _   _  | ____|_ __ ___  _   _ 
+  / _ \ | '_ \ / _` | '__| | | | |  _| | '_ ` _ \| | | |
+ / ___ \| | | | (_| | |  | |_| | | |___| | | | | | |_| |
+/_/   \_\_| |_|\__, |_|   \__, | |_____|_| |_| |_|\__,_|
+               |___/      |___/                         
 
+Did you really think you would find our backdoor so easily? :P
+
+Good effort though, here's a flag for your attempt: UWA{4dvanC3d_p0r7_5sc4nN1nG?1!?1}
+```
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{4dvanC3d_p0r7_5sc4nN1nG?1!?1}
 ```
 
 ## Emu Hack #2 - Git Gud
