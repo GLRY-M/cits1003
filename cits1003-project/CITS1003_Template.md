@@ -40,14 +40,33 @@ UWA{Marvel Loch}
 
 ## Emu Hack #2 - Git Gud
 ### Step 1
-
+As we can know from the clue, emu used `steghide` to encode their message in the image. So we can decode it with the oppsite way:
+Install the `steghide` first:
+```
+sudo apt install steghide 
+```
+Look for some help with:
+```
+steghide --help
+```
 ### Step 2
+Save the image from `html` as emufly.jpg.
+Now we got what we need:
+```
+┌──(kali㉿kali)-[~]
+└─$ steghide extract -sf /home/kali/emufly.jpg
+Enter passphrase: 
+wrote extracted data to "secret.txt".
+```
+`-sf`: Specify a file that contains hidden data.
 
-### Step X
-
+Now open the secret.txt
+````
+cat secret.txt
+```
 #### Flag Found
 ```bash
-UWA{}
+UWA{fLigHtL3sS_d4Ta_uNd3r_tH3_r4dAr} 
 ```
 
 ## Emu Hack #3 - SSH Tricks
