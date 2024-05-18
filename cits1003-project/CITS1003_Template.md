@@ -321,6 +321,33 @@ cat secret.txt
 UWA{fLigHtL3sS_d4Ta_uNd3r_tH3_r4dAr} 
 ```
 
+## Ruffled Feathers
+### Step 1
+#### Using ghex to find the problem:
+GHex, short for GNOME Hex Editor, is a desktop application used to edit binary files in hexadecimal format, providing tools to analyze and modify the raw binary content of files visually. 
+Download it with command :
+```
+sudo apt install ghex
+```
+Then open the pdf file with ghex:
+```
+ghex /home/kali/topsecret_corrupted.pdf
+```
+What we can see from the right panel is:
+
+![image](https://github.com/GLRY-M/cits1003/assets/169660884/8b9abe0b-b9a4-49e2-a3fb-002ca9b368a7)
+
+It's a little bit hard to check what's the problem. So we can open a normal pdf file to check the difference.
+
+![image](https://github.com/GLRY-M/cits1003/assets/169660884/54c88605-95ac-4740-9d73-2a71d824ce9d)
+
+What was supposed to be `length` was `Corrupted`.So we can edit this and save it. Now the pdf has the useful content in it.
+#### Flag Found
+```bash
+UWA{uNrUffLed_pDeF}
+```
+
+
 ## Emu in the Shell
 ### Step 1
 #### SSH login to server:
