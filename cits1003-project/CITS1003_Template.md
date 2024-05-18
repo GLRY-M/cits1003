@@ -573,14 +573,28 @@ UWA{CWE-22}
 
 ## Feathered Forum - Part 3
 ### Step 1
-A clear, and detailed description.  
+The provided code shows how the server handles requests for static files. The code takes a filename parameter and associates it with combining `./static/` path to locate files. If the user controlled input (file name parameter) contains something like `../` If this path traverses the sequence, then this input may be used to jump to other directories.
+#### URL Parameter Parsing:
+filename=../config.yaml is a request parameter received by the web server.
+The server code will append this parameter value to the predefined path ./static/.
+#### Server-Side Code Behavior:
+Based on the provided code, os.path.join("./static", file_path) will be executed, where file_path is obtained from the request as ../config.yaml.
+This code attempts to append ../config.yaml to the path ./static/, intending to set the access path within the ./static directory. However, due to the use of ../, the path resolves to ./static/../config.yaml, which actually points to ./config.yaml, located in the feathered-forum directory.
+```
+curl "http://34.87.251.234:8000/static?filename=../config.yaml"
+```
+`Curl`:  is a tool for sending HTTP requests. The use of `curl` here is to directly test the response of the web server from the command line, which is very effective for quick verification and vulnerability testing.
 
-### Step 2
-### Step X
+Run this command and we get:
+```
+┌──(kali㉿kali)-[~]
+└─$ curl "http://34.87.251.234:8000/static?filename=../config.yaml"
 
+secret_key: "UWA{Dir_Trav3rs@l_Flight}"
+```
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{Dir_Trav3rs@l_Flight}
 ```
 
 ## Emu Apothecary
