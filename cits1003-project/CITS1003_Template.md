@@ -183,7 +183,7 @@ A clear, and detailed description.
 
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{tH15_eMu_w1Ll_aLw4y5_b3_iN_uR_sH3lLlLllL!11!}
 ```
 
 # Part 4 - Vulnerabilities
