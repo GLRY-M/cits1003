@@ -531,26 +531,44 @@ UWA{tH15_eMu_w1Ll_aLw4y5_b3_iN_uR_sH3lLlLllL!11!}
 # Part 4 - Vulnerabilities
 ## Feathered Forum - Part 1
 ### Step 1
-A clear, and detailed description.  
-
+#### Bypass the verification:
+From the `app.py` file we can see emu just check that the "username" cookie matches an existing user which is unreliable.
+The eligible usename also provided in the code:
+```
+# Hard code the allowed users so hooman hackers cannot make their own accounts
+EMU_USERS_ACCOUNTS = [
+    {
+        "username": "BeakMaster",
+        "password": os.urandom(16).hex()
+    },
+    {
+        "username": "OstrichOutlaw",
+        "password": os.urandom(16).hex()
+    },
+    {
+        "username": "H4ck3r3mu123",
+        "password": os.urandom(16).hex()
+    }
+]
+```
 ### Step 2
-### Step X
-
+#### Set a new cookie to confuse the verification:
+Press the `F12` button on our keyboard(Windows). Then select `Application` . Create a new cookie named `username`, insert the value as `BeakMaster`.
+Now open the site directly `http://34.87.251.234:8000/forum`.
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{C00k13333z_4r3_Th3_W4y_T0_4n_3mu's_H34rt}
 ```
 
 ## Feathered Forum - Part 2
 ### Step 1
-A clear, and detailed description.  
+After we turn on the page from last question from site `http://34.87.251.234:8000/forum`.
+There is a post called `What on earth is a path traversal???` has the information we are looking for.
 
-### Step 2
-### Step X
-
+![image](https://github.com/GLRY-M/cits1003/assets/169660884/9f658483-5c92-4d77-817a-835ad58d0112)
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{CWE-22}
 ```
 
 ## Feathered Forum - Part 3
