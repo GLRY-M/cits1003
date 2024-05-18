@@ -71,14 +71,54 @@ UWA{4dvanC3d_p0r7_5sc4nN1nG?1!?1}
 
 ## Emu Hack #2 - Git Gud
 ### Step 1
-A clear, and detailed description.  
-
+#### Check Git server and clone repository ：
+Install the `git`:
+```
+sudo apt-get install git
+```
+Clone Git repository
+Run the following command to clone a Git repository named emu:
+```
+git clone http://34.116.68.59:8000/emu.git
+```
+```
+┌──(kali㉿kali)-[~]
+└─$ git clone http://34.116.68.59:8000/emu.git
+Cloning into 'emu'...
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (3/3), done.
+```
 ### Step 2
-### Step X
+#### Check the cloned repository：
+Enter the cloned warehouse repository with command `cd emu`. Then list all the file with command `ls`.
+There is a text file call `README.txt` So we need to catch the message with `cat README.txt`.
+```
+┌──(kali㉿kali)-[~/emu]
+└─$ cat README.txt
+UWA{N()w_y0U_kN0W_40w_2_u53_g17!1!!}
+--------------------------------------------------
 
+To Angry Emu hacker,
+
+As per our agreement, I have set up some SSH credentials for you to access our server:
+
+username: emu001
+password: feathers4life24
+
+To make sure only us birbs can get in I set a login shell to stop pesky hoomans getting in. Just do that SSH trick I taught you about to get in.
+
+Delete this message after you read it!
+
+Best regards,
+Mr. X
+```
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{N()w_y0U_kN0W_40w_2_u53_g17!1!!}
+
 ```
 
 ## Emu Hack #3 - SSH Tricks
