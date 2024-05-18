@@ -10,63 +10,26 @@
 # Part 1 - Linux and Networking
 ## Emu Hack #1 - Backdoored
 ### Step 1
-Picture may embed some metadata. You can use exiftool to extract this information.
-Install exiftool:
-```
-sudo apt-get install exiftool
-```
-Extract metadata:
-```
-exiftool /home/kali/loganpaul-emus.png
-```
-And we got:
-```
-┌──(kali㉿kali)-[~]
-└─$ exiftool /home/kali/loganpaul-emus.png
-ExifTool Version Number         : 12.76
-File Name                       : loganpaul-emus.png
-Directory                       : /home/kali
-......
-GPS Latitude                    : 31 deg 27' 59.19" S
-GPS Longitude                   : 119 deg 29' 0.70" E
-GPS Position                    : 31 deg 27' 59.19" S, 119 deg 29' 0.70" E
-```
-Now we have the location: `-31.466441, 119.483528`.
-So we can search it in GoogleMap: `https://www.google.com/maps`.
+A clear, and detailed description.  
+
+### Step 2
+### Step X
+
 #### Flag Found
 ```bash
-UWA{Marvel Loch}
+UWA{xxxxxxxxxx}
 ```
 
 ## Emu Hack #2 - Git Gud
 ### Step 1
-As we can know from the clue, emu used `steghide` to encode their message in the image. So we can decode it with the oppsite way:
-Install the `steghide` first:
-```
-sudo apt install steghide 
-```
-Look for some help with:
-```
-steghide --help
-```
-### Step 2
-Save the image from `html` as emufly.jpg.
-Now we got what we need:
-```
-┌──(kali㉿kali)-[~]
-└─$ steghide extract -sf /home/kali/emufly.jpg
-Enter passphrase: 
-wrote extracted data to "secret.txt".
-```
-`-sf`: Specify a file that contains hidden data.
+A clear, and detailed description.  
 
-Now open the secret.txt
-````
-cat secret.txt
-```
+### Step 2
+### Step X
+
 #### Flag Found
 ```bash
-UWA{fLigHtL3sS_d4Ta_uNd3r_tH3_r4dAr} 
+UWA{xxxxxxxxxx}
 ```
 
 ## Emu Hack #3 - SSH Tricks
@@ -299,38 +262,63 @@ UWA{w4iT_wHeR3_d1D_u_g1T_d4t_k3y???}
 # Part 3 - Forensics
 ## Caffeinated Emus
 ### Step 1
-A clear, and detailed description.  
-
-### Step 2
-### Step X
-
+Picture may embed some metadata. You can use exiftool to extract this information.
+Install exiftool:
+```
+sudo apt-get install exiftool
+```
+Extract metadata:
+```
+exiftool /home/kali/loganpaul-emus.png
+```
+And we got:
+```
+┌──(kali㉿kali)-[~]
+└─$ exiftool /home/kali/loganpaul-emus.png
+ExifTool Version Number         : 12.76
+File Name                       : loganpaul-emus.png
+Directory                       : /home/kali
+......
+GPS Latitude                    : 31 deg 27' 59.19" S
+GPS Longitude                   : 119 deg 29' 0.70" E
+GPS Position                    : 31 deg 27' 59.19" S, 119 deg 29' 0.70" E
+```
+Now we have the location: `-31.466441, 119.483528`.
+So we can search it in GoogleMap: `https://www.google.com/maps`.
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{Marvel Loch}
 ```
 
 ## Flightless Data
 ### Step 1
-A clear, and detailed description.  
-
-### Step 2
-### Step X
-
-#### Flag Found
-```bash
-UWA{xxxxxxxxxx}
+As we can know from the clue, emu used `steghide` to encode their message in the image. So we can decode it with the oppsite way:
+Install the `steghide` first:
 ```
-
-## Ruffled Feathers
-### Step 1
-A clear, and detailed description.  
-
+sudo apt install steghide 
+```
+Look for some help with:
+```
+steghide --help
+```
 ### Step 2
-### Step X
+Save the image from `html` as emufly.jpg.
+Now we got what we need:
+```
+┌──(kali㉿kali)-[~]
+└─$ steghide extract -sf /home/kali/emufly.jpg
+Enter passphrase: 
+wrote extracted data to "secret.txt".
+```
+`-sf`: Specify a file that contains hidden data.
 
+Now open the secret.txt
+```
+cat secret.txt
+```
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{fLigHtL3sS_d4Ta_uNd3r_tH3_r4dAr} 
 ```
 
 ## Emu in the Shell
